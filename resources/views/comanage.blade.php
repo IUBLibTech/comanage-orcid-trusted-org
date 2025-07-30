@@ -92,20 +92,20 @@
            <h1 class="rvt-m-top-md rvt-m-bottom-md">Comanage Fetch</h1>
         </div>
 
-<div>    
+{{-- <div>    
 <h2>Get Orcid ID</h2>
 @if($userData !== null)
     <p>rshiggin’s ORCID ID is: <strong>{{ $userData }}</strong></p>
 @else
     <p>No ORCID entry found for rshiggin.</p>
 @endif
-
+--}}
 <div style="margin-top:2rem">
-<h2>Get Orcid Token</h2>
-@if(isset($tokenData['error']))
-    <p style="color:red;">{{ $tokenData['error'] }}</p>
+<h2>Get Orcid Profile</h2>
+@if(isset($orcid['error']))
+    <p style="color:red;">{{ $orcid['error'] }}</p>
 @else
-    <pre>{{ json_encode($tokenData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
+    <pre>{{ json_encode($orcid, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
 @endif</div>
 
 <div class="rvt-m-top-xl" style="font-weight: 600;"><p>This data will be stored in an integration application like this one in order to query ORCID with the "access token" above instead of a member API key</p>
