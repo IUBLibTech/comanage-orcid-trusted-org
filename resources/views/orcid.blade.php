@@ -176,7 +176,7 @@
         		Content
     			*************************************************************** -->
    <div class="rvt-alert rvt-alert--success rvt-m-bottom-lg"style="padding:.25rem;" role="alert" aria-labelledby="success-alert-title" data-rvt-alert="success">
-  <p style="margin-left:.25rem;" >curl -i -H "Accept: application/vnd.orcid+json" -H 'Authorization: Bearer 71d434fd-8502-49a8-9563-bcfca0448259' 'https://api.sandbox.orcid.org/v3.0/0009-0002-4299-4982/<strong>summary</strong>'</p>
+  <p style="margin-left:.25rem;" >curl -i -H "Accept: application/vnd.orcid+json" -H 'Authorization: Bearer secret-hash' 'https://api.sandbox.orcid.org/v3.0/0009-0002-4299-4982/<strong>summary</strong>'</p>
     </div>
    
     <h2>ORCID Record</h2>

@@ -8,7 +8,7 @@ Route::get('/', function () {
     return view('rivet');
 })->middleware('cas.auth');
 
-Route::get('/comanage', [ApiDataController::class, 'show'])->middleware('cas.auth');
+Route::get('/comanage', [ApiDataController::class, 'getRecord'])->middleware('cas.auth');
 
 Route::get('/orcid', function () {
 	return view('orcid');
