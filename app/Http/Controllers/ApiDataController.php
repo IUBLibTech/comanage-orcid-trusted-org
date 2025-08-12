@@ -27,14 +27,14 @@ class ApiDataController extends Controller {
             ->get("https://unt.identity.iu.edu/registry/api/co/3/core/v1/people/{$currentUser}");
 
         // debug response
-        // dump($getOrcid);
+           dump($getOrcid);
 
         $data = $response->json(); 
 
         $userData = null;
 
         foreach ($data['OrgIdentity'] as $org) {
-            if (($org['meta']['actor_identifier'] ?? '') === 'currentUser') {
+            if (($org['meta']['actor_identifier'] ?? '') === $currentUser) {
         
                 foreach ($org['Identifier'] as $id) {
                     if (($id['type'] ?? '') === 'orcid') {
