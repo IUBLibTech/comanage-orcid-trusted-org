@@ -34,7 +34,7 @@ class ApiDataController extends Controller {
         $userData = null;
 
         foreach ($data['OrgIdentity'] as $org) {
-            if (($org['meta']['actor_identifier'] ?? '') === 'rshiggin') {
+            if (($org['meta']['actor_identifier'] ?? '') === 'currentUser') {
         
                 foreach ($org['Identifier'] as $id) {
                     if (($id['type'] ?? '') === 'orcid') {
