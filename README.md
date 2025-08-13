@@ -4,7 +4,7 @@
 Proof-of-concept development application     
 
 ### Requirements
-* Laravel 11+
-* PHP 8.3+
+* Laravel 12+
+* PHP 8.4+
 
 
