@@ -92,26 +92,35 @@
            <h1 class="rvt-m-top-md rvt-m-bottom-md">Comanage Fetch</h1>
         </div>
 
-{{-- <div>    
+<div>    
 <h2>Get Orcid ID</h2>
-@if($userData !== null)
-    <p>rshiggin’s ORCID ID is: <strong>{{ $userData }}</strong></p>
-@else
-    <p>No ORCID entry found for rshiggin.</p>
-@endif
---}}
-<div style="margin-top:2rem">
-<h2>Get Orcid Profile</h2>
-@if(isset($orcid['error']))
-    <p style="color:red;">{{ $orcid['error'] }}</p>
-@else
-    <pre>{{ json_encode($orcid, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
-@endif</div>
+{{-- <p>rshiggin’s ORCID ID is: 0009-0007-3710-796X</p> --}}
+<p><em>This display needs work.</em> Orcid ID is: XXXX-XXXX-XXXX-XXXX.</p>
 
-<div class="rvt-m-top-xl" style="font-weight: 600;"><p>This data will be stored in an integration application like this one in order to query ORCID with the "access token" above instead of a member API key</p>
-</div> 
-      </div>
+<h2 style="margin-top:2rem;">Save Orcid Access</h2>
+@if(session('status') === 'success' || isset($savedRecords))
+    <div class="alert alert-success">
+        <strong>{{ $message }}</strong>
+        <ul>
+            @foreach($savedRecords as $record)
+                <li>ORCID: {{ $record->orcid }}</li>
+                <li>Name: {{ $record->name }}</li>
+                <li>Updated at: {{ $record->updated_at->format('Y-m-d H:i:s') }}</li>
+            @endforeach
+        </ul>
     </div>
+@endif
+@if(session('errors'))
+    <div class="alert alert-danger">
+        <ul>
+            @foreach(session('errors') as $error)
+                <li>Row {{ $error['row'] ?? '?' }}: {{ $error['error'] }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+<p>This data will be stored in an integration application like this one in order to query ORCID with an "access token" instead of a member API key</p>
+	</div> 
  </div>
 </main>
 
