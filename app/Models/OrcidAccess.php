@@ -9,10 +9,19 @@ class OrcidAccess extends Model
     protected $table = 'orcid_access';
 
     protected $fillable = [
-        'name', 'orcid_id', 'scopes', 'access_token', 'id_token', 'refresh_token',
+        'name',
+        'orcid',
+        'scopes',
+        'access_token',
+        'id_token',
+        'refresh_token',
+        'payload',
     ];
+
     protected $casts = [
-    'scopes'        => 'array',
+        'scopes'  => 'array',
+        'payload' => 'array',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 }
-
