@@ -22,6 +22,7 @@ class ComanageApiController extends Controller
             $password = env('BASIC_AUTH_PASS');
             // finish session user passthrough
             // $cas_auth     = $currentUser ?? 'alanturing';
+	    $currentUser = 'rshiggin';
 
             $credentials = base64_encode("$username:$password");
 
@@ -30,10 +31,32 @@ class ComanageApiController extends Controller
             'Cache-Control' => 'no-cache',
             'Accept'        => 'application/json',
         ];
+       
+       // Request data related to user (uid)
+        $response = Http::withHeaders($commonHeaders)
+        // replace hardcoded username with $var
+            ->get("https://unt.identity.iu.edu/registry/api/co/3/core/v1/people/{$currentUser}");
+
+        $data = $response->json(); 
+
+        // parse JSON to pull orcid ID as $userData 
+        $userData = null;
+
+            foreach ($data['OrgIdentity'] as $org) {
+                if (($org['meta']['actor_identifier'] ?? '') === $currentUser) {
+        
+                foreach ($org['Identifier'] as $id) {
+                    if (($id['type'] ?? '') === 'orcid') {
+                    $userData = $id['identifier'];
+                    break 2; 
+                }
+            }
+          }
+        }
 
             $getToken = Http::withHeaders($commonHeaders)
             ->get('https://unt.identity.iu.edu/registry/orcid_source/orcid_tokens/token.json', [
-                'orcid' => '0009-0007-3710-796X',
+                'orcid' => $userData,
                 'coid'  => 3,
             ]);
 
@@ -56,7 +79,7 @@ class ComanageApiController extends Controller
         $errors = [];
 
 	// pass data to view
-	$savedRecords = [];
+	    $savedRecords = [];
 
         foreach ($rows as $index => $row) {
             // Normalize inputs
