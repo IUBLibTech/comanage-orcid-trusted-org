@@ -1,71 +1,84 @@
-namespace App\Http\Controllers;
-// Route::get('/orcid/view/{orcid}', [OrcidApiController::class, 'showOrcidData']);
-/* 
- @section('content')
-    <h1>ORCID Data for {{ $orcid }}</h1>
+<?php
 
-    @if(isset($error))
-        <div class="alert alert-danger">{{ $error }}</div>
-        @if(isset($status))
-            <p>Status: {{ $status }}</p>
-            <pre>{{ $message ?? '' }}</pre>
-        @endif
-    @elseif(isset($data))
-        <div class="card">
-            <div class="card-body">
-                <h5>Raw ORCID API Data</h5>
-                <pre>{{ json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
-            </div>
-        </div>
-    @else
-        <p>No data available.</p>
-    @endif
-    @endsection
-    */
-use App\Models\UserOrcid;
+namespace App\Http\Controllers;
+
+use App\Models\OrcidAccess;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 
 class OrcidApiController extends Controller
 {
-    public function fetchFromOrcidApi($id)
+    public function fetchByOrcid($orcid)
     {
-        // Fetch the ORCID record from the DB
-        $userOrcid = UserOrcid::where('orcid', '0009-0007-3710-796X')->first();
 
-         if (!$userOrcid) {
-            return view('orcid')->with([
-                'orcid' => $orcid,
-                'error' => 'ORCID record not found.',
+class OrcidController extends Controller
+{
+    public function fetchByOrcid(string $orcid)
+    {
+        // Get ORCID from session 
+        $orcidId = session('orcid');
+
+        if (!$orcidId) {
+            return redirect()->back()->withErrors('ORCID not found in session.');
+        }
+
+        // Find the matching ORCID record
+        $record = OrcidAccess::where('orcid', $orcidId)->first(); // adjust column if needed
+
+        if (!$record) {
+            return view('orcid', [
+                'data'     => null,
+                'error'    => 'ORCID record not found.',
+                'code'     => 404,
+                'message'  => 'The requested ORCID record could not be found.',
+                'raw_json' => json_encode(['error' => 'ORCID record not found.', 'status' => 404], JSON_PRETTY_PRINT),
             ]);
         }
 
-	$orcid = $userOrcid->orcid;
-        $accessToken = $userOrcid->access_token;
+        // Get access token from the matched record
+        $accessToken = $record->access_token;
 
         if (empty($accessToken)) {
-            return view('orcid')->with([
-                'orcid' => $orcid,
-                'error' => 'Missing access token.',
+            return view('orcid', [
+                'status'   => 'error',
+                'orcid'    => $orcidId,
+                'data'     => null,
+                'error'    => 'Missing access token for Bearer authentication.',
+                'code'     => 401,
+                'message'  => 'Access token is required to call the ORCID API.',
+                'raw_json' => json_encode(['error' => 'Missing access token', 'status' => 401], JSON_PRETTY_PRINT),
             ]);
         }
 
-        // Call the API
-        $response = Http::accept('application/json')
-            ->get("https://api.sandbox.orcid.org/v3.0/{$orcid}");
+        // Call ORCID API using Bearer token
+        $response = Http::withToken($accessToken)
+            ->accept('application/json')
+            ->get("https://api.sandbox.orcid.org/v3.0/{$accessToken}/summary");
 
         if ($response->failed()) {
-            return response()->json([
-                'error' => 'Failed to fetch data from ORCID API.',
-                'status' => $response->status(),
-                'message' => $response->body()
-            ], $response->status());
+            return view('orcid', [
+                'status'     => 'error',
+                'error'      => 'Failed to fetch data from ORCID API.',
+                'code'       => $response->status(),
+                'message'    => $response->body(),
+                'orcid'      => $orcid ?? null,
+                'data'       => null,
+                'raw_json'   => json_encode([
+                    'error'   => 'Failed to fetch data from ORCID API.',
+                    'status'  => $response->status(),
+                    'message' => $response->body()
+                ], JSON_PRETTY_PRINT)
+            ]);
         }
 
-          // Pass ORCID and API data to the view
-        return view('orcid')->with([
-            'orcid' => $orcid,
-	    'data' => $response->json()
-	}];
+                return view('orcid', [
+                    'status'   => 'success',
+                    'orcid'    => $orcid,
+                    'data'     => $response->json(),
+                    'error'    => null,
+                    'code'     => null,
+                    'message'  => null,
+                    'raw_json' => json_encode($response->json(), JSON_PRETTY_PRINT)
+                ]);
     }
 }

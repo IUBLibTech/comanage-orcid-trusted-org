@@ -40,7 +40,9 @@
 
     <header class="rvt-header-wrapper">
 
-        <!-- **********************************************************************
+@php($status = $status ?? session('status') ?? null)
+
+	<!-- **********************************************************************
             "Skip to main content" link for keyboard users
         *********************************************************************** -->
 
@@ -175,12 +177,52 @@
 		    <!-- **************************************************************
         		Content
     			*************************************************************** -->
-   <div class="rvt-alert rvt-alert--success rvt-m-bottom-lg"style="padding:.25rem;" role="alert" aria-labelledby="success-alert-title" data-rvt-alert="success">
+ <!-- <div class="rvt-alert rvt-alert-success rvt-m-bottom-lg"style="padding:.25rem;" role="alert" aria-labelledby="success-alert-title" data-rvt-alert="success">
   <p style="margin-left:.25rem;" >curl -i -H "Accept: application/vnd.orcid+json" -H 'Authorization: Bearer secret-hash' 'https://api.sandbox.orcid.org/v3.0/0009-0002-4299-4982/<strong>summary</strong>'</p>
+    </div> -->
+  
+<h2>ORCID Record</h2>
+
+@if($status === 'error')
+    <div class="alert alert-danger">
+        <strong>Error:</strong> {{ $error ?? 'An error occurred.' }}<br>
+        @if(!empty($code)) <strong>Status:</strong> {{ $code }}<br> @endif
+        @if(!empty($message)) <strong>Message:</strong> {{ $message }} @endif
     </div>
-   
-    <h2>ORCID Record</h2>
-<pre>
+@endif
+
+@if($status === 'success')
+    <div class="alert alert-success">
+        <strong>ORCID:</strong> {{ $orcid }}<br>
+    </div>
+@endif
+
+@if(!empty($raw_json))
+    <h4>Raw JSON</h4>
+    <pre>{{ $raw_json }}</pre>
+@endif
+
+@if($status === 'error')
+    <div class="alert alert-danger">
+        <strong>Error:</strong> {{ $error }}<br>
+        <strong>Status Code:</strong> {{ $code }}<br>
+        <strong>Message:</strong> {{ $message }}
+    </div>
+@endif
+
+@if($status === 'success')
+    <div class="alert alert-success">
+        <strong>ORCID:</strong> {{ $orcid }}<br>
+        <h4>Data:</h4>
+        <pre>{{ json_encode($data, JSON_PRETTY_PRINT) }}</pre>
+    </div>
+@endif
+
+@if(!empty($raw_json))
+    <h4>Raw JSON Output</h4>
+    <pre>{{ $raw_json }}</pre>
+@endif
+<!-- <pre>
 {
   "created-date" : {
     "value" : 1742238548817
@@ -238,7 +280,7 @@
     "validated-count" : 0
   }
 }
-</pre>
+</pre> -->
 
       </div>
     </div>

@@ -112,8 +112,8 @@ class ComanageApiController extends Controller
                         'payload'       => $validated['payload'] ?? null,
                     ]
                 );
-
-	    	    $savedRecords[] = $saved;
+		Session::put('orcid', $orcidId);
+	    	$savedRecords[] = $saved;
                 $ok++;
 	    } 
 	    catch (\Throwable $e) {
