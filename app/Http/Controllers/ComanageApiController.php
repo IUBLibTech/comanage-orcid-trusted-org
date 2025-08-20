@@ -75,63 +75,80 @@ class ComanageApiController extends Controller
             return response()->json(['error' => 'No rows found in JSON file'], 422);
         }
 
-        $ok = 0;
-        $errors = [];
+$inserted = 0;
+$updated  = 0;
+$noop     = 0; // matched but nothing changed
+$errors   = [];
+$savedRecords = [];
 
-	// pass data to view
-	    $savedRecords = [];
+foreach ($rows as $index => $row) {
+    // Normalize inputs safely
+    $row = is_array($row) ? $row : [];
 
-        foreach ($rows as $index => $row) {
-            // Normalize inputs
-            $row = is_array($row) ? $row : [];
-            $row['orcid']   = $row['orcid'] ?? $row['orcid'] ?? null;
-            $row['name']    = $row['name'] ?? ($row['name'] ?? null);
-            $row['scopes']  = $this->normalizeJsonish($row['scopes'] ?? null);
-            $row['payload'] = $this->normalizeJsonish($row['payload'] ?? null);
+    // Prefer explicit defaults
+    $row['orcid']         = $row['orcid'] ?? null;
+    $row['name']          = $row['name'] ?? null;
+    $row['scopes']        = $this->normalizeJsonish($row['scopes'] ?? null);
+    $row['payload']       = $this->normalizeJsonish($row['payload'] ?? null);
+    $row['access_token']  = $row['access_token'] ?? null;
+    $row['id_token']      = $row['id_token'] ?? null;
+    $row['refresh_token'] = $row['refresh_token'] ?? null;
 
-            try {
-                $validated = Validator::make($row, [
-                    'name'          => ['nullable', 'string', 'max:255'],
-                    'orcid'         => ['required', 'string', 'size:19'],
-                    'scopes'        => ['nullable', 'array'],
-                    'access_token'  => ['required', 'string'],
-                    'id_token'      => ['nullable', 'string'],
-                    'refresh_token' => ['nullable', 'string'],
-                    'payload'       => ['nullable', 'array'],
-                ])->validate();
+    try {
+        $validated = Validator::make($row, [
+            'name'          => ['nullable', 'string', 'max:255'],
+            'orcid'         => ['required', 'string', 'size:19', 'regex:/^\d{4}-\d{4}-\d{4}-\d{4}$/'],
+            'scopes'        => ['nullable', 'array'],
+            'access_token'  => ['required', 'string'],
+            'id_token'      => ['nullable', 'string'],
+            'refresh_token' => ['nullable', 'string'],
+            'payload'       => ['nullable', 'array'],
+        ])->validate();
 
-                $saved = OrcidAccess::updateOrCreate(
-                    ['orcid' => $validated['orcid']],
-                    [
-                        // change harcoded name value to "cas_auth" variable
-                        'name' => $validated['name'] ?? 'alanturing',
-                        'scopes'        => $validated['scopes'] ?? null,
-                        'access_token'  => $validated['access_token'],
-                        'id_token'      => $validated['id_token'] ?? null,
-                        'refresh_token' => $validated['refresh_token'] ?? null,
-                        'payload'       => $validated['payload'] ?? null,
-                    ]
-                );
-		Session::put('orcid', $orcidId);
-	    	$savedRecords[] = $saved;
-                $ok++;
-	    } 
-	    catch (\Throwable $e) {
-            $errors[] = [
-                'row' => $index,
-                'orcid' => $row['orcid'] ?? null,
-                'error' => $e->getMessage(),
-            ];
+        $model = OrcidAccess::updateOrCreate(
+            ['orcid' => $validated['orcid']],
+            [
+                // TODO: replace default with your CAS var when you wire it in
+                'name'          => $validated['name'] ?? 'alanturing',
+                'scopes'        => $validated['scopes'] ?? null,
+                'access_token'  => $validated['access_token'],
+                'id_token'      => $validated['id_token'] ?? null,
+                'refresh_token' => $validated['refresh_token'] ?? null,
+                'payload'       => $validated['payload'] ?? null,
+            ]
+        );
+
+        if ($model->wasRecentlyCreated) {
+            $inserted++;
+        } elseif ($model->wasChanged()) {
+            $updated++;
+        } else {
+            $noop++; // matched but nothing changed
         }
-    }
 
-    	return view('comanage', [
-    		'status'       => count($errors) === 0 ? 'success' : 'error',
-    		'message'      => "$ok record(s) inserted or updated.",
-    		'savedRecords' => $savedRecords,
-    		'errors'       => $errors,
-	]);
+        $savedRecords[] = $model->only(['id', 'orcid', 'name']);
+    } catch (\Throwable $e) {
+        $errors[] = [
+            'row'   => $index,
+            'orcid' => $row['orcid'] ?? null,
+            'error' => $e->getMessage(),
+        ];
+    }
 }
+
+// Total “worked on” = inserts + updates (ignoring no-ops)
+$ok = $inserted + $updated;
+
+return view('comanage', [
+    'status'       => count($errors) === 0 ? 'success' : 'error',
+    'message'      => "{$ok} record(s) inserted or updated. ({$inserted} inserted, {$updated} updated, {$noop} unchanged)",
+    'inserted'     => $inserted,
+    'updated'      => $updated,
+    'unchanged'    => $noop,
+    'savedRecords' => $savedRecords,
+    'errors'       => $errors,
+]);
+
     /**
      * Accept array/object or JSON string; return array|null.
      */
