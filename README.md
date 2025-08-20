@@ -1,10 +1,9 @@
 # orcid-comanage-integration-client
 
-### Integration application for managing ORCID access tokens created by the Comanage Registry ORCID Source plugin.   
-Proof-of-concept development application     
+### Manage ORCID access tokens created by the Comanage Registry ORCID Source plugin.   
+Proof-of-concept integration application     
 
 ### Requirements
-* Laravel 12+
-* PHP 8.4+
-
-
+* Laravel 11+    
+* PHP 8.4+    
+* COmanage Registry v4.5.0 + OrcidSource plugin
