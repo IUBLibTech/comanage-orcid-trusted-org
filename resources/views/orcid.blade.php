@@ -169,19 +169,22 @@
       
 <div class="rvt-container-lg rvt-m-top-xl rvt-m-left-none rvt-m-right-none rvt-p-right-none rvt-p-left-none">
   <div class="rvt-row">
-	<div class="rvt-cols-8-lg">
+	<div class="rvt-cols-12-lg">
 	    <div class="rvt-prose">
-           <h1 class="rvt-m-top-md rvt-m-bottom-md">ORCID Record Fetch</h1>
+           <h1 class="rvt-m-top-md rvt-m-bottom-md">ORCID Record Summary</h1>
         </div>
 
 		    <!-- **************************************************************
         		Content
     			*************************************************************** -->
+<div style="margin-bottom: 1rem;" class="rvt-alert rvt-alert--info" role="alert" aria-labelledby="information-alert-title" data-rvt-alert="info">
+  <p class="rvt-alert__message">TO DO: Parse and format data into HTML.</p>
+</div>
+
  <!-- <div class="rvt-alert rvt-alert-success rvt-m-bottom-lg"style="padding:.25rem;" role="alert" aria-labelledby="success-alert-title" data-rvt-alert="success">
   <p style="margin-left:.25rem;" >curl -i -H "Accept: application/vnd.orcid+json" -H 'Authorization: Bearer secret-hash' 'https://api.sandbox.orcid.org/v3.0/0009-0002-4299-4982/<strong>summary</strong>'</p>
     </div> -->
   
-<h2>ORCID Record</h2>
 
 @if($status === 'error')
     <div class="alert alert-danger">
@@ -193,12 +196,11 @@
 
 @if($status === 'success')
     <div class="alert alert-success">
-        <strong>ORCID:</strong> {{ $orcid }}<br>
+        <strong>ORCID ID:</strong> {{ $orcid }}<br>
     </div>
 @endif
 
 @if(!empty($raw_json))
-    <h4>Raw JSON</h4>
     <pre>{{ $raw_json }}</pre>
 @endif
 
@@ -210,18 +212,18 @@
     </div>
 @endif
 
-@if($status === 'success')
+{{-- @if($status === 'success')
     <div class="alert alert-success">
         <strong>ORCID:</strong> {{ $orcid }}<br>
         <h4>Data:</h4>
         <pre>{{ json_encode($data, JSON_PRETTY_PRINT) }}</pre>
     </div>
-@endif
+@endif --}}
 
-@if(!empty($raw_json))
+{{-- @if(!empty($raw_json))
     <h4>Raw JSON Output</h4>
     <pre>{{ $raw_json }}</pre>
-@endif
+@endif --}}
 <!-- <pre>
 {
   "created-date" : {

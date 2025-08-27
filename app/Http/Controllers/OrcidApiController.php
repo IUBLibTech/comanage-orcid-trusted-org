@@ -11,7 +11,7 @@ class OrcidApiController extends Controller
     {
         // Find the matching ORCID record
         // FIX: revise to match name in cas_auth variable
-        $record = OrcidAccess::whereRaw('LOWER(name) = ?', ['alanturing'])->first();
+        $record = OrcidAccess::whereRaw('LOWER(name) = ?', ['rshiggin'])->first();
 
         if (!$record) {
             return view('orcid', [
