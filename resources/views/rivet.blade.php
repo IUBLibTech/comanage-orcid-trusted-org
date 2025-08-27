@@ -191,8 +191,20 @@
             <li>Standalone IU systems will use these permissions in the form of access tokens to read/write ORCID records</li></ul>
             </li></ul>
     <hr>
-	    <p class-"rvt-m-top-sm"> <strong>Individual researchers</strong>: To authorize IU to have read & write access to your ORCID record, click here <a class="rvt-color-green-400"> [button = /registry/co_petitions/start/]</a>.</p>
-<p> Comanage will process the enrollment request and send users to ORCID to authorize the permissions.</p>
+	    <p class-"rvt-m-top-sm"> <strong>Individual researchers</strong>:</p> 
+<p>To authorize IU to have read & write access to your ORCID record   
+ <a href="https://unt.identity.iu.edu/registry/co_petitions/start/coef:6">
+<button type="button" class="rvt-button">
+<span>Begin</span>
+<svg class="rvt-icon-link-external" fill="currentColor" width="13" height="13" viewBox="0 0 16 16"><path d="M15 1H9v2h2.586l-3 3L10 7.414l3-3V7h2V1Z"></path><path d="M7 3H1v12h12V9h-2v4H3V5h4V3Z"></path></svg>
+</button></a></p>
+<ul>
+<li>Please be patient.</li> 
+<li>You will be redirected and asked to log in again.</li> 
+<li>The initial processing by the Comanage Registry will take several seconds.</li> 
+<li>Sign in and authorize ORCID when prompted.</li>
+</ul>
+<p>Comanage will process the enrollment request and send users to ORCID to authorize the permissions.</p>
 
     <hr>
 

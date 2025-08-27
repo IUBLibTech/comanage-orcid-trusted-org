@@ -89,15 +89,17 @@
   <div class="rvt-row">
 	<div class="rvt-cols-8-lg">
 	    <div class="rvt-prose">
-           <h1 class="rvt-m-top-md rvt-m-bottom-md">Comanage Fetch</h1>
+           <h1 class="rvt-m-top-md rvt-m-bottom-md">Success!</h1>
         </div>
-
+<div class="rvt-alert rvt-alert--info" role="alert" aria-labelledby="information-alert-title" data-rvt-alert="info">
+  <p class="rvt-alert__message">TO DO: Add spinner while page load is pending.</p>
+</div>
 <div>    
-<h2>Get Orcid ID</h2>
 {{-- <p>rshiggin’s ORCID ID is: 0009-0007-3710-796X</p> --}}
-<p><em>This display needs work.</em> Orcid ID is: XXXX-XXXX-XXXX-XXXX.</p>
+<p>Your ORCID ID is <strong>0009-0007-3710-796X</strong>.</p>
+</div>
 
-<h2 style="margin-top:2rem;">Save Orcid Access</h2>
+<h2 style="margin-top:2rem; margin-bottom:1 rem;">Access Token saved</h2>
 @if(session('status') === 'success' || isset($savedRecords))
     <div class="alert alert-success">
         <strong>{{ $message }}</strong>
@@ -122,6 +124,12 @@
 <p>This data will be stored in an integration application like this one in order to query ORCID with an "access token" instead of a member API key</p>
 	</div> 
  </div>
+<div>
+<p>
+<a href="/orcid">
+<button class="rvt-cta rvt-cta--button">
+<span>View</span></button></a> a summary of your ORCID record.</p>
+</div>
 </main>
 
     <footer class="rvt-footer-base rvt-footer-base--light">
