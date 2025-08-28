@@ -18,13 +18,11 @@ class ComanageApiController extends Controller
      */
     public function getAccessToken(Request $request)
     {
-            $username = env('BASIC_AUTH_USER');
+            $apiuser = env('BASIC_AUTH_USER');
             $password = env('BASIC_AUTH_PASS');
-            // finish session user passthrough
-            // $cas_auth     = $currentUser ?? 'alanturing';
-	        $currentUser = 'rshiggin';
+            $username = app('cas.username'); 
 
-            $credentials = base64_encode("$username:$password");
+            $credentials = base64_encode("$apiuser:$password");
 
         $commonHeaders = [
             'Authorization' => "Basic {$credentials}",
@@ -35,7 +33,7 @@ class ComanageApiController extends Controller
        // Request data related to user (uid)
         $response = Http::withHeaders($commonHeaders)
         // replace hardcoded username with $var
-            ->get("https://unt.identity.iu.edu/registry/api/co/3/core/v1/people/{$currentUser}");
+            ->get("https://unt.identity.iu.edu/registry/api/co/3/core/v1/people/{$username}");
 
         $data = $response->json(); 
 
@@ -43,7 +41,7 @@ class ComanageApiController extends Controller
         $userData = null;
 
             foreach ($data['OrgIdentity'] as $org) {
-                if (($org['meta']['actor_identifier'] ?? '') === $currentUser) {
+                if (($org['meta']['actor_identifier'] ?? '') === $username) {
         
                 foreach ($org['Identifier'] as $id) {
                     if (($id['type'] ?? '') === 'orcid') {
@@ -104,7 +102,7 @@ class ComanageApiController extends Controller
                     ['orcid' => $validated['orcid']],
                     [
                         // change harcoded name value to "cas_auth" variable
-                        'name' => $validated['name'] ?? 'rshiggin',
+                        'name' => $validated['name'] ?? $username,
                         'scopes'        => $validated['scopes'] ?? null,
                         'access_token'  => $validated['access_token'],
                         'id_token'      => $validated['id_token'] ?? null,

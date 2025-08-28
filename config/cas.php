@@ -188,5 +188,5 @@ return [
     |--------------------------------------------------------------------------
     | Whether to add the Secure flag to cookies.
      */
-    'cas_session_secure' => env('HTTPS_ONLY_COOKIES', false),
+    'cas_session_secure' => env('HTTPS_ONLY_COOKIES', true),
 ];

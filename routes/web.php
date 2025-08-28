@@ -7,8 +7,13 @@ use App\Http\Controllers\OrcidApiController;
 
 Route::get('/', function () {
     return view('rivet');
-})->middleware('cas.auth');
+});
+
+Route::get('/login', function () {
+    return cas()->authenticate();
+});
 
 Route::get('/comanage', [ComanageApiController::class, 'getAccessToken'])->middleware('cas.auth');
 
 Route::get('/orcid', [OrcidApiController::class, 'fetchByOrcid'])->middleware('cas.auth');
+

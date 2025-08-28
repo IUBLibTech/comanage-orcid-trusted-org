@@ -125,10 +125,12 @@
 	</div> 
  </div>
 <div>
-<p>
+<p>Click to view a summary of your ORCID record.</p>
 <a href="/orcid">
 <button class="rvt-cta rvt-cta--button">
-<span>View</span></button></a> a summary of your ORCID record.</p>
+<span>View</span>
+</button>
+</a>
 </div>
 </main>
 

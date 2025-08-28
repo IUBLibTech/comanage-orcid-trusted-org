@@ -26,29 +26,10 @@
     </head>
     <body class="rvt-layout">
 
-    <!-- **************************************************************************
-        APP CREATE/EDIT RESOURCE - TWO-COLUMN LAYOUT WITH ANCHORED SIDEBAR
-
-        -> rivet.iu.edu/layouts/app-create-or-edit-resource-page/
-    *************************************************************************** -->
-
-    <!-- **************************************************************************
-        Header
-
-        -> rivet.iu.edu/components/header/
-    *************************************************************************** -->
 
     <header class="rvt-header-wrapper">
 
-        <!-- **********************************************************************
-            "Skip to main content" link for keyboard users
-        *********************************************************************** -->
-
         <a class="rvt-header-wrapper__skip-link" href="#main-content">Skip to main content</a>
-
-        <!-- **********************************************************************
-            Global header area
-        *********************************************************************** -->
 
         <div class="rvt-header-global">
             <div class="rvt-p-lr-md">
@@ -99,18 +80,20 @@
                                 </ul>
                                 
 
-                                <!-- **************************************************
-                                    Avatar and "log out" link
-                                *************************************************** -->
+                            <div class="rvt-flex rvt-items-center rvt-m-left-md rvt-p-bottom-md rvt-p-bottom-none-lg-up">
+                            @if (cas()->isAuthenticated())
+                                <div class="rvt-ts-14">
+                                    <span><strong>Logged in as </strong></span>
+                                </div>
+                                <div class="rvt-ts-14 rvt-m-left-xs rvt-p-right-xs rvt-m-right-xs rvt-border-right">{{ cas()->user() }}</div>
+                            @else
+				            <a href="{{ url('/login') }}">
+                             <button type="button" class="rvt-button">IU Login</button>
+                             </a>
+                             @endif
+				            </div>
 
-                               <div class="rvt-flex rvt-items-center rvt-m-left-md rvt-p-bottom-md rvt-p-bottom-none-lg-up">
-                                    <div class="rvt-ts-14">
-                                        <span><strong>Logged in as </strong></span>
-                                    </div>
-                                    <div class="rvt-ts-14 rvt-m-left-xs rvt-p-right-xs rvt-m-right-xs rvt-border-right">{{ cas()->user() }}</div>
-				   
-				</div>
-                            </nav>
+                          </nav>
                         </div>
                     </div>
                 </div>
@@ -118,54 +101,11 @@
         </div>
     </header>
 
-    <!-- **************************************************************************
-        Main content area
-    *************************************************************************** -->
-
     <main id="main-content" class="rvt-layout__wrapper rvt-layout__wrapper--details">
-
-	        <!-- **********************************************************************
-            Sidebar
-        *********************************************************************** -->
 
         <div class="rvt-layout__sidebar [ rvt-p-top-xxl rvt-p-left-md rvt-bg-black-000 ]" id="section-nav">
 
-            <!-- **********************************************************************
-                Sidenav
-            *********************************************************************** -->
-
- <!--           <nav class="rvt-sidenav" aria-labelledby="details-pages" data-rvt-sidenav>
-                <span class="rvt-sidenav__label" id="details-pages">Details pages</span>
-                <ul class="rvt-sidenav__list">
-                    <li class="rvt-sidenav__item">
-                        <a href="#side1" class="rvt-sidenav__link">Side navigation one</a>
-                    </li>
-                    <li class="rvt-sidenav__item">
-                        <a href="#side2" class="rvt-sidenav__link">Side navigation two</a>
-                    </li>
-                    <li class="rvt-sidenav__item">
-                        <a href="#side3" class="rvt-sidenav__link">Side navigation three</a>
-                    </li>
-                    <li class="rvt-sidenav__item">
-                        <a href="#side4" class="rvt-sidenav__link">Side navigation four</a>
-                    </li>
-                </ul>
-            </nav> -->
         </div>	
-
-	<!-- **************************************************************
-                    Breadcrumb navigation
-                *************************************************************** -->
-
-       <!--         <nav class="rvt-flex rvt-items-center" role="navigation" aria-label="Breadcrumb">
-                    <ol class="rvt-breadcrumbs rvt-grow-1">
-                        <li>
-                            <a href="#0">
-                                <span class="rvt-sr-only">Home</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">  <path d="m8 .798 7 4.667V15H9v-4.444H7V15H1V5.465L8 .798ZM3 6.535V13h2V8.556h6V13h2V6.535L8 3.202 3 6.535Z"/></svg>
-                            </a>
-                        </li>
-                </nav> -->
       
             <div class="rvt-container-lg rvt-m-top-xl rvt-m-left-none rvt-m-right-none rvt-p-right-none rvt-p-left-none">
 		<div class="rvt-row">
@@ -192,17 +132,20 @@
             </li></ul>
     <hr>
 	    <p class-"rvt-m-top-sm"> <strong>Individual researchers</strong>:</p> 
-<p>To authorize IU to have read & write access to your ORCID record   
+<p>Click to authorize IU to have read & write access to your ORCID record </p> 
+<div>  
  <a href="https://unt.identity.iu.edu/registry/co_petitions/start/coef:6">
 <button type="button" class="rvt-button">
 <span>Begin</span>
 <svg class="rvt-icon-link-external" fill="currentColor" width="13" height="13" viewBox="0 0 16 16"><path d="M15 1H9v2h2.586l-3 3L10 7.414l3-3V7h2V1Z"></path><path d="M7 3H1v12h12V9h-2v4H3V5h4V3Z"></path></svg>
-</button></a></p>
+</button></a></div>
+<div>
+<p class-"rvt-m-top-sm"> <strong>Please be patient</strong>:</p>
 <ul>
-<li>Please be patient.</li> 
-<li>You will be redirected and asked to log in again.</li> 
+<li>You will be redirected and may be asked to log in.</li> 
 <li>The initial processing by the Comanage Registry will take several seconds.</li> 
 <li>Sign in and authorize ORCID when prompted.</li>
+<li>If testing, use <i>@mailinator.com</i> credentials.</i>
 </ul>
 <p>Comanage will process the enrollment request and send users to ORCID to authorize the permissions.</p>
 
@@ -245,3 +188,4 @@
     </script>
     </body>
 </html>
+
