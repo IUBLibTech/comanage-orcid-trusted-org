@@ -27,7 +27,7 @@ class OrcidApiController extends Controller
         }
 
         $accessToken = $record->access_token ?? null;
-        $orcidId     = $record->orcid ?? null;   // <-- use the DB orcid for the URL
+        $orcidId     = $record->orcid ?? null;   
 
         if (empty($accessToken) || empty($orcidId)) {
             return view('orcid', [

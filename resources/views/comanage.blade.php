@@ -70,7 +70,7 @@
                                         <span><strong>Logged in as </strong></span>
                                     </div>
                                     <div class="rvt-ts-14 rvt-m-left-xs rvt-p-right-xs rvt-m-right-xs rvt-border-right">{{ cas()->user() }}</div>
-				   
+					<a href="{{ route('logout') }}">Logout</a>				   
 				</div>
                             </nav>
                         </div>
