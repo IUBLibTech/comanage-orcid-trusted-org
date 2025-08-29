@@ -10,8 +10,13 @@ Route::get('/', function () {
 });
 
 Route::get('/login', function () {
-    return cas()->authenticate();
+    cas()->authenticate();
+    return redirect('/');
 });
+
+Route::get('/logout', function () {
+    return cas()->logout(url('/'));
+})->name('logout');
 
 Route::get('/comanage', [ComanageApiController::class, 'getAccessToken'])->middleware('cas.auth');
 
