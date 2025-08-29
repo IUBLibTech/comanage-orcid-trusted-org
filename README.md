@@ -1,4 +1,4 @@
-# orcid-comanage-integration-client
+# comanage-orcid-trusted-org
 
 ### Enable affliated users to give IU trusted org status in ORCID
 * Proof-of-concept Comanage-ORCID integration application
