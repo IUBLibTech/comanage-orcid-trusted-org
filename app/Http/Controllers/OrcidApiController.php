@@ -9,9 +9,11 @@ class OrcidApiController extends Controller
 {
     public function fetchByOrcid()
     {
+
+    $username = app('cas.username');
+
         // Find the matching ORCID record
-        // FIX: revise to match name in cas_auth variable
-        $record = OrcidAccess::whereRaw('LOWER(name) = ?', ['rshiggin'])->first();
+        $record = OrcidAccess::whereRaw('LOWER(name) = ?', [strtolower($username)])->first();
 
         if (!$record) {
             return view('orcid', [
@@ -60,14 +62,17 @@ class OrcidApiController extends Controller
             ], $response->status());
         }
 
-        return view('orcid', [
-            'status'   => 'success',
-            'orcid'    => $orcidId,
-            'data'     => $response->json(),
-            'error'    => null,
-            'code'     => null,
-            'message'  => null,
-            'raw_json' => json_encode($response->json(), JSON_PRETTY_PRINT),
-        ]);
+    $json = $response->json();
+
+    return view('orcid', [
+        'status'   => 'success',
+        'orcid'    => $orcidId,
+        'data'     => $json,
+        'error'    => null,
+        'code'     => null,
+        'message'  => null,
+        'raw_json' => json_encode($json, JSON_PRETTY_PRINT),
+    ]);
+    
     }
 }
